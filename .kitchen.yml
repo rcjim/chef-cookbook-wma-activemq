@@ -4,19 +4,82 @@ driver:
 
 provisioner:
   name: chef_zero
+#  deprecations_as_errors: true
 
 verifier:
   name: inspec
+  inspec_tests:
+    - path: test/integration/default
+    - name: activemq-install
+      path: test/integration/activemq-install
 
 platforms:
   - name: centos-6
   - name: centos-7
+  - name: debian-8
+  - name: debian-9
+  - name: ubuntu-14.04
+  - name: ubuntu-16.04
+  - name: ubuntu-18.04
 
 suites:
   - name: default
-    run_list:
-      - recipe[wma-activemq::default]
+    run_list: test::legacy
     verifier:
       inspec_tests:
-        - test/integration/default
-    attributes:
+        - name: activemq-legacy
+          path: test/integration/activemq-legacy
+  - name: resource_based
+    run_list: test::default
+    verifier:
+      inspec_tests:
+        - name: activemq-resource
+          path: test/integration/activemq-resource
+  - name: default-latest-java
+    run_list: test::legacy
+    verifier:
+      inspec_tests:
+        - name: activemq-legacy
+          path: test/integration/activemq-legacy
+    attributes: {
+      "java": {
+          "install_flavor" : "oracle",
+          "jdk_version" : "10.0.2",
+          "jdk": {
+            "10.0.2": {
+              "bin_cmds": ["appletviewer", "jar", "javac", "javapackager", "jconsole", "jdeprscan", "jimage", "jlink", "jmod", "jshell", "jstatd", "orbd", "rmid", "serialver", "unpack200", "xjc", "idlj", "jarsigner", "javadoc", "javaws", "jcontrol", "jdeps", "jinfo", "jmap", "jps", "jstack", "jweblauncher", "pack200", "rmiregistry", "servertool", "wsgen", "jaotc", "java", "javap", "jcmd", "jdb", "jhsdb", "jjs", "jmc", "jrunscript", "jstat", "keytool", "rmic", "schemagen", "tnameserv", "wsimport"],
+              "x86_64": {
+                "url": "http://download.oracle.com/otn-pub/java/jdk/10.0.2+13/19aef61b38124481863b1413dce1855f/jdk-10.0.2_linux-x64_bin.tar.gz",
+                "checksum": "6633c20d53c50c20835364d0f3e172e0cbbce78fff81867488f22a6298fa372b"
+              }
+            }
+          },
+          "oracle" : {
+               "accept_oracle_download_terms" : true
+          }
+       }
+    }
+  - name: resource_based-latest-java
+    run_list: test::default
+    verifier:
+      inspec_tests:
+        - name: activemq-resource
+          path: test/integration/activemq-resource
+    attributes: {
+      "java": {
+          "install_flavor" : "oracle",
+          "jdk_version" : "10.0.2",
+          "jdk": {
+            "10.0.2": {
+              "bin_cmds": ["appletviewer", "jar", "javac", "javapackager", "jconsole", "jdeprscan", "jimage", "jlink", "jmod", "jshell", "jstatd", "orbd", "rmid", "serialver", "unpack200", "xjc", "idlj", "jarsigner", "javadoc", "javaws", "jcontrol", "jdeps", "jinfo", "jmap", "jps", "jstack", "jweblauncher", "pack200", "rmiregistry", "servertool", "wsgen", "jaotc", "java", "javap", "jcmd", "jdb", "jhsdb", "jjs", "jmc", "jrunscript", "jstat", "keytool", "rmic", "schemagen", "tnameserv", "wsimport"],
+              "x86_64": {
+                "url": "http://download.oracle.com/otn-pub/java/jdk/10.0.2+13/19aef61b38124481863b1413dce1855f/jdk-10.0.2_linux-x64_bin.tar.gz",
+                "checksum": "6633c20d53c50c20835364d0f3e172e0cbbce78fff81867488f22a6298fa372b"
+              }
+            }
+          },
+          "oracle" : {
+               "accept_oracle_download_terms" : true
+          }
+       }
+    }

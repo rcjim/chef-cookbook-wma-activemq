@@ -1,0 +1,10 @@
+name: activemq-resource
+title: ActiveMQ Inspec tests for the wma_activemq_install resource
+maintainer: Jim Morris (jmorris@usgs.gov)
+license: Public Domain
+copyright: none
+summary: Verify ActiveMQ is installed via resource
+version: 0.0.1
+
+supports:
+  - os-family: linux

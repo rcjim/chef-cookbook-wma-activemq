@@ -67,3 +67,12 @@ begin
 rescue LoadError => e
   puts ">>> Gem load error: #{e}, omitting #{task.name}" unless ENV['CI']
 end
+
+desc 'Run ChefSpec/Rspec unit tests'
+task :unit do
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:unit) do |t|
+    t.rspec_opts = '--color --format progress'
+    t.pattern = 'spec/*_spec.rb'
+  end
+end
